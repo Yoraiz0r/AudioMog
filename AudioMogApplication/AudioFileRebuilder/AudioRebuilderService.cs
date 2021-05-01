@@ -128,7 +128,7 @@ namespace AudioMog.Application.AudioFileRebuilder
 					var uassetBytes = File.ReadAllBytes(uAssetFilePath);
 					var sizeBytes = BitConverter.GetBytes((uint) (fileBytes.Length - 4));
 					Buffer.BlockCopy(
-						sizeBytes, 0, fileBytes,
+						sizeBytes, 0, uassetBytes,
 						uassetBytes.Length - Settings.Parser.UAssetFileSizeOffsetFromEndOfFile,
 						sizeBytes.Length);
 
@@ -218,7 +218,7 @@ namespace AudioMog.Application.AudioFileRebuilder
 
 			if (CompareToOriginalFile)
 				for (int i = stepsAfterRebuildingFile.Count - 1; i >= 0; i--)
-					stepsAfterRebuildingFile.Insert(i, new CompareToOriginalStep(originalBackup));
+					stepsAfterRebuildingFile.Insert(i + 1, new CompareToOriginalStep(originalBackup, (i - 1) / 2));
 
 			var steps = new List<ARebuilderStep>();
 			steps.AddRange(stepsBeforeRebuildingFile);
