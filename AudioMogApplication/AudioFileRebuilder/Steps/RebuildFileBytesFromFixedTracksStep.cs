@@ -9,7 +9,7 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 		public override void Run(Blackboard blackboard)
 		{
 			var original = blackboard.File;
-
+			
 			var innerFileUpToFirstTrack = original.InnerFileBytes
 				.SubArray(0,original.MaterialSection.InnerFilePositionOfFirstTracks);
 				
@@ -21,10 +21,10 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 			blackboard.FileBytes = newFile;
 		}
 		
-		private static byte[] PrepareFullFile(byte[] fileUpToMaterialSection, byte[] innerFileUpToFirstTrack, List<TemporaryTrack> tracks, byte[] endOfFilePortion)
+		private static byte[] PrepareFullFile(byte[] bytesBeforeFile, byte[] innerFileUpToFirstTrack, List<TemporaryTrack> tracks, byte[] endOfFilePortion)
 		{
 			List<byte[]> fileSequence = new List<byte[]>();
-			fileSequence.Add(fileUpToMaterialSection);
+			fileSequence.Add(bytesBeforeFile);
 			fileSequence.Add(innerFileUpToFirstTrack);
 			foreach (var track in tracks)
 			{
