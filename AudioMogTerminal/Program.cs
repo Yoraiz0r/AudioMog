@@ -13,8 +13,8 @@ namespace AudioMog.Terminal
 {
 	internal class Program
 	{
-		public const string AssemblyVersion = "1.0.0.1";
-		public const string AssemblyFileVersion = "1.0.0.1";
+		public const string AssemblyVersion = "2021.05.01.2";
+		public const string AssemblyFileVersion = "2021.05.01.2";
 		
 		private static ServiceProvider _serviceProvider;
 		public static ConsoleApplicationLogger Logger;
@@ -61,19 +61,29 @@ namespace AudioMog.Terminal
 			if (args.Length == 0)
 				ShowUsageInstructions();
 
+			bool shouldWaitForInputOnceDone =
+				!Settings.TerminalSettings.ImmediatelyQuitOnceAllTasksAreDone || args.Length == 0;
 			Logger.LogLevel = (ProgramLogLevel)Settings.TerminalSettings.LogLevel;
 			foreach (var arg in args)
 			{
-				var strategy = GetHandleStrategyFor(arg);
-				if (strategy == null)
-					continue;
-				
-				strategy.Run();
+				try
+				{
+					var strategy = GetHandleStrategyFor(arg);
+					if (strategy == null)
+						continue;
+
+					strategy.Run();
+				}
+				catch (Exception e)
+				{
+					Logger.Error($"{e}");
+					shouldWaitForInputOnceDone = true;
+				}
 				Logger.Log("");
 			}
 			Logger.LogLevel = ProgramLogLevel.Everything;
 
-			if (!Settings.TerminalSettings.ImmediatelyQuitOnceAllTasksAreDone || args.Length == 0)
+			if (shouldWaitForInputOnceDone)
 				WaitForInput();
 		}
 
