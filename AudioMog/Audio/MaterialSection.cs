@@ -20,7 +20,6 @@ namespace AudioMog.Core.Audio
 			Users = new List<MaterialUser>();
 			
 			EntryAddressesSize = binaryReader.ReadUInt16At(MaterialSectionOffset + 0x02);
-			InnerFilePositionOfFirstTracks = sectionDeclaration.OffsetInInnerFile + 16 + EntryAddressesSize;
 			
 			var entryCount = binaryReader.ReadUInt16At(MaterialSectionOffset + 0x04);
 			Entries = new List<MaterialEntry>();
@@ -28,6 +27,8 @@ namespace AudioMog.Core.Audio
 			{
 				var positionOfOffsetFromMaterialSectionOffset = MaterialSectionOffset + 0x10 + songEntryIndex * 0x04;
 				var localEntryOffset = binaryReader.ReadUInt32At(positionOfOffsetFromMaterialSectionOffset);
+				if (songEntryIndex == 0)
+					InnerFilePositionOfFirstTracks = sectionDeclaration.OffsetInInnerFile + localEntryOffset;
 				
 				var entryOffset = MaterialSectionOffset + localEntryOffset;
 
