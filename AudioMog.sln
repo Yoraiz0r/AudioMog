@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioMogTerminal", "AudioMogTerminal\AudioMogTerminal.csproj", "{F76457E9-6BC7-4D0B-9FF0-3ABAD8C1684C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioMog", "AudioMog\AudioMog.csproj", "{02A28844-CEEF-477E-9D45-377737EB4857}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioMogApplication", "AudioMogApplication\AudioMogApplication.csproj", "{4BDF39A2-243B-4801-82F9-67D4333C8664}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F76457E9-6BC7-4D0B-9FF0-3ABAD8C1684C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F76457E9-6BC7-4D0B-9FF0-3ABAD8C1684C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F76457E9-6BC7-4D0B-9FF0-3ABAD8C1684C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F76457E9-6BC7-4D0B-9FF0-3ABAD8C1684C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02A28844-CEEF-477E-9D45-377737EB4857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02A28844-CEEF-477E-9D45-377737EB4857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02A28844-CEEF-477E-9D45-377737EB4857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02A28844-CEEF-477E-9D45-377737EB4857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BDF39A2-243B-4801-82F9-67D4333C8664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BDF39A2-243B-4801-82F9-67D4333C8664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BDF39A2-243B-4801-82F9-67D4333C8664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BDF39A2-243B-4801-82F9-67D4333C8664}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

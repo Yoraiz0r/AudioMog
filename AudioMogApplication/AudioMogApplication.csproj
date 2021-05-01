@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{4BDF39A2-243B-4801-82F9-67D4333C8664}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>AudioMog.Application</RootNamespace>
+        <AssemblyName>AudioMog.Application</AssemblyName>
+        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>none</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="ApplicationSettings.cs" />
+        <Compile Include="AService.cs" />
+        <Compile Include="AudioExtractor\AudioExtractorService.cs" />
+        <Compile Include="AudioExtractor\AudioExtractorSettings.cs" />
+        <Compile Include="AudioFileRebuilder\AudioRebuilderFileOutput.cs" />
+        <Compile Include="IApplicationLogger.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="ServiceProvider.cs" />
+        <Compile Include="AudioFileRebuilder\Steps\ARebuilderStep.cs" />
+        <Compile Include="AudioFileRebuilder\Steps\Blackboard.cs" />
+        <Compile Include="AudioFileRebuilder\Steps\CompareToOriginalStep.cs" />
+        <Compile Include="AudioFileRebuilder\Steps\FixMaterialTrackOffsetsStep.cs" />
+        <Compile Include="AudioFileRebuilder\Steps\FixMusicSlicesStep.cs" />
+        <Compile Include="AudioFileRebuilder\Steps\FixTotalFileSizeStep.cs" />
+        <Compile Include="AudioFileRebuilder\Steps\RebuildFileBytesFromFixedTracksStep.cs" />
+        <Compile Include="AudioFileRebuilder\Steps\FixTrackHeadersStep.cs" />
+        <Compile Include="AudioFileRebuilder\Steps\ReplaceTrackContentsStep.cs" />
+        <Compile Include="AudioFileRebuilder\TemporaryTrack.cs" />
+        <Compile Include="AudioFileRebuilder\ExposedHcaReader.cs" />
+        <Compile Include="AudioFileRebuilder\AudioRebuilderProjectSettings.cs" />
+        <Compile Include="AudioFileRebuilder\AudioRebuilderService.cs" />
+        <Compile Include="AudioFileRebuilder\MusicTrackFixObject.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\AudioMog\AudioMog.csproj">
+        <Project>{02a28844-ceef-477e-9d45-377737eb4857}</Project>
+        <Name>AudioMog</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+      <PackageReference Include="VGAudio" Version="2.2.1" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>
