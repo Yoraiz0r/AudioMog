@@ -58,20 +58,6 @@ namespace AudioMog.Terminal
 
 			_serviceProvider = new ServiceProvider(Logger, Settings.ApplicationSettings);
 
-#if DEBUG
-			args = new string[]
-			{
-				//@"P:\Projects\Modding\KH3\PAKs\Test\BGM_ra_field.uexp",
-				//@"P:\Projects\Modding\KH3\PAKs\Test\BGM_ra_field_Project\RebuildSettings.json",
-				//@"P:\Projects\Modding\KH3\PAKs\Test\MUSIC0000000.win.sab.bytes",
-				//@"P:\Projects\Modding\KH3\PAKs\Test\MUSIC0000000.win.sab_Project\RebuildSettings.json",
-				//@"P:\Projects\Modding\KH3\PAKs\Test\BGM_battle_rg21.uexp",
-				//@"P:\Projects\Modding\KH3\PAKs\Test\BGM_battle_rg21\RebuildSettings.json",
-				//@"P:\Projects\Modding\KH3\PAKs\Test\Battle_Sora.uexp",
-				//@"P:\Projects\Modding\KH3\PAKs\Test\Battle_Sora_Project\RebuildSettings.json",
-			};
-#endif
-
 			if (args.Length == 0)
 				ShowUsageInstructions();
 
