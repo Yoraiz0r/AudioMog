@@ -22,7 +22,7 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 			int sizeWeCanCheck = Math.Min(_originalBackup.Length, fileBytes.Length);
 			for (int i = 0; i < sizeWeCanCheck; i++)
 				if (_originalBackup[i] != fileBytes[i])
-					blackboard.Logger.Error($"index: {i},  {_originalBackup[i]} : {fileBytes[i]}");
+					Debug.WriteLine($"index: {i},  {_originalBackup[i]} : {fileBytes[i]}");
 		}
 	}
 }
