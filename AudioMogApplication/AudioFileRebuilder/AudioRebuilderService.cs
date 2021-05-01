@@ -186,7 +186,7 @@ namespace AudioMog.Application.AudioFileRebuilder
 				try
 				{
 					File.WriteAllBytes(fileOutputPath, fileOutput.FileBytes);
-					Logger.Log($"Created repacked uexp at: {fileOutputPath}");
+					Logger.Log($"Created repacked {fileOutput.Extension} file at: {fileOutputPath}");
 				}
 				catch (Exception e)
 				{
