@@ -29,8 +29,8 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 				var wavFilePath = Path.ChangeExtension(hcaFilePath, ".wav");
 				if (File.Exists(wavFilePath))
 				{
-					blackboard.Logger.Log($"Appending {track.ExpectedName}!");
-					var wavFileBytes = File.ReadAllBytes(hcaFilePath);
+					blackboard.Logger.Log($"Appending {Path.ChangeExtension(track.ExpectedName, ".wav")}!");
+					var wavFileBytes = File.ReadAllBytes(wavFilePath);
 					var wavReader = new WaveReader();
 					var audioData = wavReader.Read(wavFileBytes);
 					var hcaWriter = new HcaWriter();
