@@ -68,7 +68,7 @@ namespace AudioMog.Core.Audio
 				if (declaration.Magic == magic)
 					return declaration;
 			
-			throw new FileIsMissingNotHaveSectionDeclarationException();
+			throw new FileDoesNotHaveSectionDeclarationException($"Could not find section magic code: {magic}!");
 		}
 
 		public long AlignToBlockStart(long position)
