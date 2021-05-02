@@ -45,7 +45,7 @@
         <Compile Include="Audio\INamedEntry.cs" />
         <Compile Include="Audio\MaterialSection.cs" />
         <Compile Include="Exceptions\FileDoesNotContainAudioBinaryException.cs" />
-        <Compile Include="Exceptions\FileIsMissingNotHaveSectionDeclarationException.cs" />
+        <Compile Include="Exceptions\FileDoesNotHaveSectionDeclarationException.cs" />
         <Compile Include="Exceptions\FileIsUnsupportedBigEndianAudioBinaryException.cs" />
         <Compile Include="Exceptions\FileParserException.cs" />
         <Compile Include="ExtensionMethods.cs" />
