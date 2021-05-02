@@ -33,7 +33,9 @@ namespace AudioMog.Core.Audio
 			DescriptorLength = reader.ReadByteAt(offsetForFileStart + 0x09);
 			UnknownAtA = reader.ReadUInt16At(offsetForFileStart + 0x0a);
 			FileSize = reader.ReadUInt32At(offsetForFileStart + 0x0c);
-			HeaderSize = 16 + DescriptorLength + (16 - DescriptorLength) % 16;
+
+			int bytesNeededToPad = 16 - DescriptorLength % 16;
+			HeaderSize = 16 + DescriptorLength + bytesNeededToPad;
 		}
 	}
 }
