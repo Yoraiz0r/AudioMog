@@ -5,6 +5,7 @@ using System.IO;
 using AudioMog.Application.AudioExtractor;
 using AudioMog.Application.AudioFileRebuilder.Steps;
 using AudioMog.Core;
+using AudioMog.Core.Audio;
 using Newtonsoft.Json.Linq;
 
 namespace AudioMog.Application.AudioFileRebuilder
@@ -39,6 +40,7 @@ namespace AudioMog.Application.AudioFileRebuilder
 
 			var parser = new FileParser();
 			parser.Settings = Settings.Parser;
+			parser.Logger = Logger;
 
 			var fileBytes = File.ReadAllBytes(originalFilePath);
 			var audioBinaryFile = parser.Parse(fileBytes);
@@ -75,7 +77,7 @@ namespace AudioMog.Application.AudioFileRebuilder
 			};
 			fileOutputs.Add(audioFileOutput);
 
-			GetAdditionalFileOutputsBasedOnFormat(originalFilePath, fileBytes, fileOutputs);
+			GetAdditionalFileOutputsBasedOnFormat(originalFilePath, audioBinaryFile, fileBytes, fileOutputs);
 
 			var outputFileName = Path.GetFileNameWithoutExtension(fileInfo.Name);
 			var outputFolder = RunningDirectory;
@@ -119,30 +121,50 @@ namespace AudioMog.Application.AudioFileRebuilder
 			return false;
 		}
 
-		private void GetAdditionalFileOutputsBasedOnFormat(string filePath, byte[] fileBytes, List<AudioRebuilderFileOutput> fileOutputs)
+		private void GetAdditionalFileOutputsBasedOnFormat(string filePath, AAudioBinaryFile file, byte[] fileBytes,
+			List<AudioRebuilderFileOutput> fileOutputs)
 		{
 			if (Path.GetExtension(filePath).ToLower() == ".uexp")
-			{
-				if (TryGettingFileByExtension(TargetFileName, ".uasset", out var uAssetFilePath))
-				{
-					var uassetBytes = File.ReadAllBytes(uAssetFilePath);
-					var sizeBytes = BitConverter.GetBytes((uint) (fileBytes.Length - 4));
-					Buffer.BlockCopy(
-						sizeBytes, 0, uassetBytes,
-						uassetBytes.Length - Settings.Parser.UAssetFileSizeOffsetFromEndOfFile,
-						sizeBytes.Length);
+				ModifyUAsset(fileBytes, fileOutputs, file);
+		}
 
-					var uassetFileOutput = new AudioRebuilderFileOutput()
-					{
-						Extension = ".uasset",
-						FileBytes = uassetBytes,
-					};
-					fileOutputs.Add(uassetFileOutput);
-				}
-				else
-					Logger.Error(
-						$"Failed to find project's original uasset! Looked for {TargetFileName} at: {ParentDirectory}");
+		private void ModifyUAsset(byte[] fileBytes, List<AudioRebuilderFileOutput> fileOutputs, AAudioBinaryFile file)
+		{
+			if (!TryGettingFileByExtension(TargetFileName, ".uasset", out var uAssetFilePath))
+			{
+				Logger.Error($"Failed to find project's original uasset! Looked for {TargetFileName} at: {ParentDirectory}");
+				return;
 			}
+
+			var uassetBytes = File.ReadAllBytes(uAssetFilePath);
+
+			uint originalExpectedSize = (uint)file.Header.FileSize + (uint)file.BytesBeforeFile.Length;
+			var originalSizeBytes = BitConverter.GetBytes(originalExpectedSize);
+			var replacementPosition = uassetBytes.FindSubArrayInReverse(originalSizeBytes);
+			if (replacementPosition == -1)
+			{
+				Logger.Error($"Failed to find UAsset file size position! Looked for value {originalExpectedSize} at {uAssetFilePath}");
+				return;
+			}
+
+			var offsetOverride = Settings.Parser.OverrideUAssetFileSizeOffsetFromEndOfFile;
+			if (offsetOverride.HasValue)
+				replacementPosition = uassetBytes.Length - offsetOverride.Value;
+			
+			Logger.Log($"Replacing UAsset file size expectation: {originalExpectedSize} -> {fileBytes.Length - 4}, at offset: {replacementPosition} (pos: {uassetBytes.Length - replacementPosition} from end-of-file)");
+
+			var replacementSizeBytes = BitConverter.GetBytes((uint) (fileBytes.Length - 4));
+			Buffer.BlockCopy(
+				replacementSizeBytes, 0, uassetBytes,
+				(int) replacementPosition,
+				replacementSizeBytes.Length);
+
+			var uassetFileOutput = new AudioRebuilderFileOutput()
+			{
+				Extension = ".uasset",
+				FileBytes = uassetBytes,
+			};
+			fileOutputs.Add(uassetFileOutput);
 		}
 
 		private bool GetNecessaryPaths()

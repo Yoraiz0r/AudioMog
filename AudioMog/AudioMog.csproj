@@ -49,7 +49,6 @@
         <Compile Include="Exceptions\FileIsUnsupportedBigEndianAudioBinaryException.cs" />
         <Compile Include="Exceptions\FileParserException.cs" />
         <Compile Include="ExtensionMethods.cs" />
-        <Compile Include="FileParser.cs" />
         <Compile Include="FileParserSettings.cs" />
         <Compile Include="Music\MusicLayerMaterialUser.cs" />
         <Compile Include="Music\MusicAudioBinaryFile.cs" />

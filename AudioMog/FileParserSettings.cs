@@ -8,6 +8,6 @@ namespace AudioMog.Core
 	{
 		public AudioBinaryFileVersion MusicFileFileVersion;
 		public AudioBinaryFileVersion SoundFileFileVersion;
-		public int UAssetFileSizeOffsetFromEndOfFile;
+		public int? OverrideUAssetFileSizeOffsetFromEndOfFile;
 	}
 }

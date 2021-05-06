@@ -49,5 +49,36 @@ namespace AudioMog.Core
 				return value;
 			return (value + blockAlignSize - extraSize);
 		}
+		
+		public static long FindSubArray(this byte[] array, byte[] subArray)
+		{
+			int maxAttempts = array.Length - subArray.Length;
+			for (int i = 0; i < maxAttempts; i++)
+				if (CompareSubArray(array, i, subArray))
+					return i;
+
+			return -1;
+		}
+
+		public static long FindSubArrayInReverse(this byte[] array, byte[] subArray)
+		{
+			int maxAttempts = array.Length - subArray.Length;
+			for (int i = maxAttempts - 1; i >= 0; i--)
+				if (CompareSubArray(array, i, subArray))
+					return i;
+
+			return -1;
+		}
+		private static bool CompareSubArray (byte[] array, int position, byte[] candidate)
+		{
+			if (candidate.Length > (array.Length - position))
+				return false;
+
+			for (int i = 0; i < candidate.Length; i++)
+				if (array[position + i] != candidate[i])
+					return false;
+
+			return true;
+		}
 	}
 }

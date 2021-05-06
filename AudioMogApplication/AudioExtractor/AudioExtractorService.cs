@@ -32,6 +32,7 @@ namespace AudioMog.Application.AudioExtractor
 
 			var parser = new FileParser();
 			parser.Settings = Settings.Parser;
+			parser.Logger = Logger;
 
 			var audioBinaryFile = parser.Parse(fileBytes);
 			var materialEntries = audioBinaryFile.MaterialSection.Entries;

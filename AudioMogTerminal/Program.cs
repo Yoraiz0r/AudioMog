@@ -36,7 +36,6 @@ namespace AudioMog.Terminal
 				{
 					SoundFileFileVersion = new AudioBinaryFileVersion() {Main = 2, Sub = 0},
 					MusicFileFileVersion = new AudioBinaryFileVersion() {Main = 2, Sub = 1},
-					UAssetFileSizeOffsetFromEndOfFile = 0x5c,
 				},
 				AudioExtractor = new AudioExtractorSettings()
 				{

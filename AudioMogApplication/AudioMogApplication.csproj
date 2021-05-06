@@ -43,6 +43,7 @@
         <Compile Include="AudioExtractor\AudioExtractorService.cs" />
         <Compile Include="AudioExtractor\AudioExtractorSettings.cs" />
         <Compile Include="AudioFileRebuilder\AudioRebuilderFileOutput.cs" />
+        <Compile Include="FileParser.cs" />
         <Compile Include="IApplicationLogger.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="ServiceProvider.cs" />
