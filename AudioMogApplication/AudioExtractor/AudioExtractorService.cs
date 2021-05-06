@@ -64,7 +64,6 @@ namespace AudioMog.Application.AudioExtractor
 			{
 				UseWavFilesIfAvailable = true,
 				AdditionalOutputFolders = new string[0],
-				Overrides = new MusicTrackFixObject[0],
 			};
 
 			if (file is MusicAudioBinaryFile mabf)
@@ -88,6 +87,7 @@ namespace AudioMog.Application.AudioExtractor
 					originals.Add(fixObject);
 				}
 
+				projectSettings.Overrides = new MusicTrackFixObject[0];
 				projectSettings.Originals = originals.ToArray();
 			}
 			
