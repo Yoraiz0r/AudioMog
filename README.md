@@ -73,4 +73,4 @@ If you're editing music files, here are the fields you can put inside each entry
 # Credits
 - AudioMog is written by Yoraiz0r
 - Most of the knowledge applied in AudioMog's code comes from [vgmstream](https://github.com/vgmstream/vgmstream)
-- Special thanks to Ray Cooper, normie, ShonicTH, and the entire OpenKH community!
+- Special thanks to Ray Cooper, normie, ShonicTH, Jason Storey, and the entire OpenKH community!
