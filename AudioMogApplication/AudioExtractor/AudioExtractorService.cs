@@ -80,6 +80,8 @@ namespace AudioMog.Application.AudioExtractor
 						MusicIndex = entry.Index,
 						SliceIndex = slice.Index,
 						MaterialsUsed = slice.Layers.Select(x => (uint)x.MaterialIndex).ToArray(),
+						LoopStartSample = slice.LoopStart,
+						LoopEndSample = slice.LoopEnd,
 						EntrySample = slice.EntryPointsSample,
 						ExitSample = slice.ExitPointsSample
 					};
