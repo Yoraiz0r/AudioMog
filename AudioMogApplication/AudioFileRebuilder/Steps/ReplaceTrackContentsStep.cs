@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using AudioMog.Application.Codecs;
+using AudioMog.Core.Audio;
 using VGAudio.Containers.Hca;
 using VGAudio.Containers.Wave;
 
@@ -22,11 +24,18 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 			if (track.ExpectedName == null)
 				return;
 
-			var hcaFilePath = Path.Combine(_hcaFilesFolder, track.ExpectedName);
+			var originalCodec = AvailableCodecs.GetCodec(track.CurrentCodec);
+			if (originalCodec == null)
+			{
+				blackboard.Logger.Error($"The track ({track.ExpectedName}) uses the {track.OriginalEntry.Codec} Codec, but AudioMog has no handler to replace it! Skipping!");
+				return;
+			}
+			
+			var typelessFilePath = Path.Combine(_hcaFilesFolder, track.ExpectedName);
 
 			if (blackboard.Settings.UseWavFilesIfAvailable)
 			{
-				var wavFilePath = Path.ChangeExtension(hcaFilePath, ".wav");
+				var wavFilePath = Path.ChangeExtension(typelessFilePath, ".wav");
 				if (File.Exists(wavFilePath))
 				{
 					blackboard.Logger.Log($"Appending {Path.ChangeExtension(track.ExpectedName, ".wav")}!");
@@ -35,16 +44,30 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 					var audioData = wavReader.Read(wavFileBytes);
 					var hcaWriter = new HcaWriter();
 					var hcaFileBytes = hcaWriter.GetFile(audioData);
-					track.HcaPortion = hcaFileBytes;
+					track.RawPortion = hcaFileBytes;
+					track.CurrentCodec = MaterialCodecType.HCA;
 					return;
 				}
 			}
-			
+
+
+			var hcaFilePath = Path.ChangeExtension(typelessFilePath, ".hca");
 			if (File.Exists(hcaFilePath))
 			{
-				blackboard.Logger.Log($"Appending {track.ExpectedName}!");
+				blackboard.Logger.Log($"Appending {Path.ChangeExtension(track.ExpectedName, ".hca")}!");
 				var hcaFileBytes = File.ReadAllBytes(hcaFilePath);
-				track.HcaPortion = hcaFileBytes;
+				track.RawPortion = hcaFileBytes;
+				track.CurrentCodec = MaterialCodecType.HCA;
+				return;
+			}
+			
+			var rawFilePath = Path.ChangeExtension(typelessFilePath, originalCodec.FileFormat);
+			if (File.Exists(rawFilePath))
+			{
+				blackboard.Logger.Log($"Appending {Path.ChangeExtension(track.ExpectedName, originalCodec.FileFormat)}!");
+				var hcaFileBytes = File.ReadAllBytes(rawFilePath);
+				track.RawPortion = hcaFileBytes;
+				track.CurrentCodec = track.OriginalEntry.Codec;
 				return;
 			}
 			

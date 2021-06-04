@@ -24,8 +24,8 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 				binaryWriter.Write(accumulatedOffset);
 				
 				//Debug.WriteLine($"entry: {i}, accumulated: {accumulatedOffset}, MTRLOffset: {yoraiInfo.OffsetFromWeirdPoint}, trackSize: {trackSize}");
-				accumulatedOffset += (uint)track.HcaPortion.Length + (uint)track.HeaderPortion.Length;
-				var hexAignmentRemainder = (track.HcaPortion.Length + track.HeaderPortion.Length) % 16;
+				accumulatedOffset += (uint)track.RawPortion.Length + (uint)track.HeaderPortion.Length;
+				var hexAignmentRemainder = (track.RawPortion.Length + track.HeaderPortion.Length) % 16;
 				var valueToFixAlignment = (16 - hexAignmentRemainder) % 16;
 				accumulatedOffset += (uint)valueToFixAlignment;
 			}

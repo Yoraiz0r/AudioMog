@@ -12,7 +12,7 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 		{
 			var positionBeforeMagic = file.InnerFileStartOffset;
 			
-			var expectedSize = fileBytes.Length - positionBeforeMagic - 4;
+			var expectedSize = fileBytes.Length - positionBeforeMagic - file.BytesAfterFile.Length;
 			
 			WriteUint(fileBytes, (int)positionBeforeMagic + 0x0c, (uint)expectedSize);
 			

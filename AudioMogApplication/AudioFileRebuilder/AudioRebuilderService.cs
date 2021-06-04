@@ -16,9 +16,16 @@ namespace AudioMog.Application.AudioFileRebuilder
 
 		public string FilePathForConfig;
 		public string RunningDirectory;
-
+		
+#if DEBUG
 		public bool CompareToOriginalFile = false;
-
+		public string CompareToOtherFilePath =
+			null;//@"P:\Projects\Modding\KH3\PAKs\Test2\BGM_title_launch_Project\manual\BGM_title_launch.uexp";
+#else
+		public bool CompareToOriginalFile = false;
+		public string CompareToOtherFilePath = null;
+#endif
+		
 		private AudioRebuilderProjectSettings _projectSettings = new AudioRebuilderProjectSettings();
 		public string TargetFileName;
 		public string ParentDirectory;
@@ -51,9 +58,10 @@ namespace AudioMog.Application.AudioFileRebuilder
 				tracks.Add(new TemporaryTrack()
 				{
 					OriginalEntry = entry,
-					HeaderPortion = fileBytes.SubArray(entry.HeaderPosition, entry.NoHcaHeaderSize),
-					HcaPortion = fileBytes.SubArray(entry.HcaStreamStartPosition, entry.HcaStreamSize),
-					ExpectedName = $"{Path.GetFileNameWithoutExtension(fileInfo.Name)}_{entry.EntryIndex:D3}.hca",
+					HeaderPortion = fileBytes.SubArray(entry.HeaderPosition, entry.NoStreamHeaderSize),
+					RawPortion = fileBytes.SubArray(entry.InnerStreamStartPosition, entry.InnerStreamSize),
+					ExpectedName = $"{Path.GetFileNameWithoutExtension(fileInfo.Name)}_{entry.EntryIndex:D3}",
+					CurrentCodec = entry.Codec,
 				});
 
 			var blackboard = new Blackboard()
@@ -227,6 +235,7 @@ namespace AudioMog.Application.AudioFileRebuilder
 			var stepsBeforeRebuildingFile = new List<ARebuilderStep>()
 			{
 				new ReplaceTrackContentsStep(hcaFilesFolder),
+				//new PrintTrackHeadersStep(),
 				new FixTrackHeadersStep(),
 			};
 
@@ -245,6 +254,8 @@ namespace AudioMog.Application.AudioFileRebuilder
 			var steps = new List<ARebuilderStep>();
 			steps.AddRange(stepsBeforeRebuildingFile);
 			steps.AddRange(stepsAfterRebuildingFile);
+			if (CompareToOtherFilePath != null)
+				steps.Add(new CompareToOtherStep(CompareToOtherFilePath));
 
 			foreach (var step in steps)
 				step.Run(blackboard);

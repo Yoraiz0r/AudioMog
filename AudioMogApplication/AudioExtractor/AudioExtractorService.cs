@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using AudioMog.Application.AudioFileRebuilder;
+using AudioMog.Application.Codecs;
 using AudioMog.Core;
 using AudioMog.Core.Audio;
 using AudioMog.Core.Music;
 using Newtonsoft.Json;
-using VGAudio.Containers.Hca;
-using VGAudio.Containers.Wave;
 
 namespace AudioMog.Application.AudioExtractor
 {
@@ -104,8 +104,6 @@ namespace AudioMog.Application.AudioExtractor
 			var materialEntries = audioBinaryFile.MaterialSection.Entries;
 			foreach (var entry in materialEntries)
 			{
-				var hcaFileBytes = fileBytes.SubArray(entry.HcaStreamStartPosition, entry.HcaStreamSize);
-
 				var extractedFilePath = Path.Combine(outputFolder, _materialIndexToFileName[entry.EntryIndex]);
 
 				var fullFilePath = Path.GetFullPath(extractedFilePath);
@@ -117,26 +115,35 @@ namespace AudioMog.Application.AudioExtractor
 					Logger.Log($"Created folder at: {fullFolderPath}");
 				}
 
-				if (Settings.AudioExtractor.ExtractAsHca)
+				var codec = AvailableCodecs.GetCodec(entry.Codec);
+				if (codec == null)
 				{
-					File.WriteAllBytes(fullFilePath, hcaFileBytes);
-					Logger.Log($"Created hca audio track at: {fullFilePath}");
+					Logger.Error($"The track ({_materialIndexToFileName[entry.EntryIndex]}) uses the {entry.Codec} Codec, but AudioMog has no handler to extract it! Skipping!");
+					continue;
+				}
+
+				if (Settings.AudioExtractor.ExtractAsRaw)
+				{
+					var rawPath = Path.ChangeExtension(fullFilePath, codec.FileFormat);
+					codec.ExtractOriginal(Logger, entry, fileBytes, rawPath);
 				}
 
 				if (Settings.AudioExtractor.ExtractAsWav)
 				{
-					HcaReader reader = new HcaReader();
-					var audioData = reader.Read(hcaFileBytes);
-					
-					WaveWriter writer = new WaveWriter();
-					var wavBytes = writer.GetFile(audioData);
-
-					var wavPath = Path.ChangeExtension(fullFilePath, ".wav");
-					File.WriteAllBytes(wavPath, wavBytes);
-					Logger.Log($"Created wav audio track at: {wavPath}");
+					try
+					{
+						var wavPath = Path.ChangeExtension(fullFilePath, ".wav");
+						codec.ExtractAsWav(Logger, entry, fileBytes, wavPath);
+					}
+					catch (Exception e)
+					{
+						Logger.Error("Failed to convert to wav! Will attempt to continue extraction!");
+						Logger.Error(e.ToString());
+					}
 				}
 			}
 		}
+
 
 		private void CollectMaterialToFileNames(AAudioBinaryFile audioBinaryFile, string actualFileName)
 		{

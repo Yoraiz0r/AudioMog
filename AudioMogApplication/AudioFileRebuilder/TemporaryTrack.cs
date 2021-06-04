@@ -5,8 +5,9 @@ namespace AudioMog.Application.AudioFileRebuilder
 	public class TemporaryTrack
 	{
 		public byte[] HeaderPortion;
-		public byte[] HcaPortion;
+		public byte[] RawPortion;
 		public string ExpectedName;
+		public MaterialCodecType CurrentCodec;
 		public MaterialSection.MaterialEntry OriginalEntry;
 	}
 

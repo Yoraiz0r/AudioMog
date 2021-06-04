@@ -36,6 +36,9 @@
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
+        <Reference Include="Vorbisfile-CS, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\..\..\..\Gits\VorbisfileCS\bin\Debug\Vorbisfile-CS.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="ApplicationSettings.cs" />
@@ -43,6 +46,16 @@
         <Compile Include="AudioExtractor\AudioExtractorService.cs" />
         <Compile Include="AudioExtractor\AudioExtractorSettings.cs" />
         <Compile Include="AudioFileRebuilder\AudioRebuilderFileOutput.cs" />
+        <Compile Include="AudioFileRebuilder\Steps\CompareToOtherStep.cs" />
+        <Compile Include="AudioFileRebuilder\Steps\PrintTrackHeadersStep.cs" />
+        <Compile Include="Codecs\AvailableCodecs.cs" />
+        <Compile Include="Codecs\CustomWavWriter.cs" />
+        <Compile Include="Codecs\CustomWavWriterRequest.cs" />
+        <Compile Include="Codecs\HcaCodec.cs" />
+        <Compile Include="Codecs\ACodec.cs" />
+        <Compile Include="Codecs\IWavSampleWriter.cs" />
+        <Compile Include="Codecs\OggVorbisCodec.cs" />
+        <Compile Include="Codecs\OGGVorbisToWavSampleWriter.cs" />
         <Compile Include="FileParser.cs" />
         <Compile Include="IApplicationLogger.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,7 +82,11 @@
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>
+      <PackageReference Include="NAudio" Version="2.0.0" />
+      <PackageReference Include="NAudio.Vorbis" Version="1.3.1" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+      <PackageReference Include="NVorbis" Version="0.10.3" />
+      <PackageReference Include="StbVorbisSharp" Version="1.16.2" />
       <PackageReference Include="VGAudio" Version="2.2.1" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

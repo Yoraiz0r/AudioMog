@@ -29,9 +29,9 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 			foreach (var track in tracks)
 			{
 				fileSequence.Add(track.HeaderPortion);
-				fileSequence.Add(track.HcaPortion);
+				fileSequence.Add(track.RawPortion);
 
-				var hexAlignment = (track.HeaderPortion.Length + track.HcaPortion.Length) % 16;
+				var hexAlignment = (track.HeaderPortion.Length + track.RawPortion.Length) % 16;
 				int remainder = (16 - hexAlignment) % 16;
 				if (remainder != 0)
 					fileSequence.Add(new byte[remainder]);

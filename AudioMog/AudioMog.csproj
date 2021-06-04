@@ -42,6 +42,9 @@
         <Compile Include="Audio\AudioBinaryFileHeader.cs" />
         <Compile Include="Audio\AudioBinarySectionDeclaration.cs" />
         <Compile Include="Audio\AudioBinaryFileVersion.cs" />
+        <Compile Include="Audio\ExtraData\HcaExtraData.cs" />
+        <Compile Include="Audio\ExtraData\ICodecExtraData.cs" />
+        <Compile Include="Audio\ExtraData\OggVorbisExtraData.cs" />
         <Compile Include="Audio\INamedEntry.cs" />
         <Compile Include="Audio\MaterialSection.cs" />
         <Compile Include="Exceptions\FileDoesNotContainAudioBinaryException.cs" />
