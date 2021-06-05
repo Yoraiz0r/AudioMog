@@ -35,10 +35,10 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 
 			if (blackboard.Settings.UseWavFilesIfAvailable)
 			{
-				var wavFilePath = Path.ChangeExtension(typelessFilePath, ".wav");
+				var wavFilePath = AddExtension(typelessFilePath, ".wav");
 				if (File.Exists(wavFilePath))
 				{
-					blackboard.Logger.Log($"Appending {Path.ChangeExtension(track.ExpectedName, ".wav")}!");
+					blackboard.Logger.Log($"Appending {AddExtension(track.ExpectedName, ".wav")}!");
 					var wavFileBytes = File.ReadAllBytes(wavFilePath);
 					var wavReader = new WaveReader();
 					var audioData = wavReader.Read(wavFileBytes);
@@ -51,20 +51,20 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 			}
 
 
-			var hcaFilePath = Path.ChangeExtension(typelessFilePath, ".hca");
+			var hcaFilePath = AddExtension(typelessFilePath, ".hca");
 			if (File.Exists(hcaFilePath))
 			{
-				blackboard.Logger.Log($"Appending {Path.ChangeExtension(track.ExpectedName, ".hca")}!");
+				blackboard.Logger.Log($"Appending {AddExtension(track.ExpectedName, ".hca")}!");
 				var hcaFileBytes = File.ReadAllBytes(hcaFilePath);
 				track.RawPortion = hcaFileBytes;
 				track.CurrentCodec = MaterialCodecType.HCA;
 				return;
 			}
 			
-			var rawFilePath = Path.ChangeExtension(typelessFilePath, originalCodec.FileFormat);
+			var rawFilePath = AddExtension(typelessFilePath, originalCodec.FileFormat);
 			if (File.Exists(rawFilePath))
 			{
-				blackboard.Logger.Log($"Appending {Path.ChangeExtension(track.ExpectedName, originalCodec.FileFormat)}!");
+				blackboard.Logger.Log($"Appending {AddExtension(track.ExpectedName, originalCodec.FileFormat)}!");
 				var hcaFileBytes = File.ReadAllBytes(rawFilePath);
 				track.RawPortion = hcaFileBytes;
 				track.CurrentCodec = track.OriginalEntry.Codec;
@@ -73,5 +73,8 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 			
 			blackboard.Logger.Log($"Found no replacement to {track.ExpectedName}, using original track from uexp!");
 		}
+
+		private static string AddExtension(string filePath, string newExtension) =>
+			Core.ExtensionMethods.AddExtension(filePath, newExtension);
 	}
 }

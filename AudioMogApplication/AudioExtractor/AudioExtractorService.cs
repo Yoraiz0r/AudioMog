@@ -103,43 +103,47 @@ namespace AudioMog.Application.AudioExtractor
 		{
 			var materialEntries = audioBinaryFile.MaterialSection.Entries;
 			foreach (var entry in materialEntries)
+				WriteOutAudioFile(fileBytes, outputFolder, entry);
+		}
+
+		private void WriteOutAudioFile(byte[] fileBytes, string outputFolder, MaterialSection.MaterialEntry entry)
+		{
+			var extractedFilePath = Path.Combine(outputFolder, _materialIndexToFileName[entry.EntryIndex]);
+
+			var fullFilePath = Path.GetFullPath(extractedFilePath);
+			var fullFolderPath = Path.GetDirectoryName(fullFilePath);
+
+			if (!Directory.Exists(fullFolderPath))
 			{
-				var extractedFilePath = Path.Combine(outputFolder, _materialIndexToFileName[entry.EntryIndex]);
+				Directory.CreateDirectory(fullFolderPath);
+				Logger.Log($"Created folder at: {fullFolderPath}");
+			}
 
-				var fullFilePath = Path.GetFullPath(extractedFilePath);
-				var fullFolderPath = Path.GetDirectoryName(fullFilePath);
+			var codec = AvailableCodecs.GetCodec(entry.Codec);
+			if (codec == null)
+			{
+				Logger.Error(
+					$"The track ({_materialIndexToFileName[entry.EntryIndex]}) uses the {entry.Codec} Codec, but AudioMog has no handler to extract it! Skipping!");
+				return;
+			}
 
-				if (!Directory.Exists(fullFolderPath))
+			if (Settings.AudioExtractor.ExtractAsRaw)
+			{
+				var rawPath = ExtensionMethods.ChangeExtension(fullFilePath, codec.FileFormat);
+				codec.ExtractOriginal(Logger, entry, fileBytes, rawPath);
+			}
+
+			if (Settings.AudioExtractor.ExtractAsWav)
+			{
+				try
 				{
-					Directory.CreateDirectory(fullFolderPath);
-					Logger.Log($"Created folder at: {fullFolderPath}");
+					var wavPath = ExtensionMethods.ChangeExtension(fullFilePath, ".wav");
+					codec.ExtractAsWav(Logger, entry, fileBytes, wavPath);
 				}
-
-				var codec = AvailableCodecs.GetCodec(entry.Codec);
-				if (codec == null)
+				catch (Exception e)
 				{
-					Logger.Error($"The track ({_materialIndexToFileName[entry.EntryIndex]}) uses the {entry.Codec} Codec, but AudioMog has no handler to extract it! Skipping!");
-					continue;
-				}
-
-				if (Settings.AudioExtractor.ExtractAsRaw)
-				{
-					var rawPath = Path.ChangeExtension(fullFilePath, codec.FileFormat);
-					codec.ExtractOriginal(Logger, entry, fileBytes, rawPath);
-				}
-
-				if (Settings.AudioExtractor.ExtractAsWav)
-				{
-					try
-					{
-						var wavPath = Path.ChangeExtension(fullFilePath, ".wav");
-						codec.ExtractAsWav(Logger, entry, fileBytes, wavPath);
-					}
-					catch (Exception e)
-					{
-						Logger.Error("Failed to convert to wav! Will attempt to continue extraction!");
-						Logger.Error(e.ToString());
-					}
+					Logger.Error("Failed to convert to wav! Will attempt to continue extraction!");
+					Logger.Error(e.ToString());
 				}
 			}
 		}

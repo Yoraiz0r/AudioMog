@@ -80,5 +80,17 @@ namespace AudioMog.Core
 
 			return true;
 		}
+		public static string ChangeExtension(string filePath, string newExtension)
+		{
+			var extensionIndex = filePath.LastIndexOf('.');
+			if (extensionIndex != -1)
+				filePath = filePath.Substring(0, extensionIndex);
+			return filePath + newExtension;
+		}
+
+		public static string AddExtension(string filePath, string newExtension)
+		{
+			return filePath + newExtension;
+		}
 	}
 }

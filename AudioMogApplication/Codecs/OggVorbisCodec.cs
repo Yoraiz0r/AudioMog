@@ -16,7 +16,7 @@ namespace AudioMog.Application.Codecs
 		{
 			var rawBytes = fullFileBytes.SubArray(entry.InnerStreamStartPosition, entry.InnerStreamSize);
 
-			var rawPath = Path.ChangeExtension(outputPath, FileFormat);
+			var rawPath = ExtensionMethods.ChangeExtension(outputPath, FileFormat);
 			File.WriteAllBytes(rawPath, rawBytes);
 			logger.Log($"Created ogg audio track at: {rawPath}");
 		}

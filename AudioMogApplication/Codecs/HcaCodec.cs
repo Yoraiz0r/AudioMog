@@ -40,7 +40,7 @@ namespace AudioMog.Application.Codecs
 			var encryption = fullBinaryReader.ReadByteAt(entry.ExtraDataOffset + 0x0d);
 			if (encryption == 1)
 				DecryptHCA(entry, rawContentBytes, fullBinaryReader);
-			var rawPath = Path.ChangeExtension(outputPath, FileFormat);
+			var rawPath = ExtensionMethods.ChangeExtension(outputPath, FileFormat);
 			File.WriteAllBytes(rawPath, rawContentBytes);
 			logger.Log($"Created hca audio track at: {rawPath}");
 		}
