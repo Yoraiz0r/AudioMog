@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace AudioMog.Application.Codecs
+namespace AudioMog.Application.Utilities
 {
 	public interface IWavSampleWriter
 	{

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace AudioMog.Application.Codecs
+namespace AudioMog.Application.Utilities
 {
 	public class CustomWavWriter
 	{

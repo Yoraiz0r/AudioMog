@@ -49,13 +49,10 @@
         <Compile Include="AudioFileRebuilder\Steps\CompareToOtherStep.cs" />
         <Compile Include="AudioFileRebuilder\Steps\PrintTrackHeadersStep.cs" />
         <Compile Include="Codecs\AvailableCodecs.cs" />
-        <Compile Include="Codecs\CustomWavWriter.cs" />
-        <Compile Include="Codecs\CustomWavWriterRequest.cs" />
         <Compile Include="Codecs\HcaCodec.cs" />
         <Compile Include="Codecs\ACodec.cs" />
-        <Compile Include="Codecs\IWavSampleWriter.cs" />
         <Compile Include="Codecs\OggVorbisCodec.cs" />
-        <Compile Include="Codecs\OGGVorbisToWavSampleWriter.cs" />
+        <Compile Include="Codecs\OggVorbisToWavSampleWriter.cs" />
         <Compile Include="FileParser.cs" />
         <Compile Include="IApplicationLogger.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,6 +71,9 @@
         <Compile Include="AudioFileRebuilder\AudioRebuilderProjectSettings.cs" />
         <Compile Include="AudioFileRebuilder\AudioRebuilderService.cs" />
         <Compile Include="AudioFileRebuilder\MusicTrackFixObject.cs" />
+        <Compile Include="Utilities\CustomWavWriter.cs" />
+        <Compile Include="Utilities\CustomWavWriterRequest.cs" />
+        <Compile Include="Utilities\IWavSampleWriter.cs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\AudioMog\AudioMog.csproj">

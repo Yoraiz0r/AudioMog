@@ -1,14 +1,15 @@
 ﻿using System.IO;
 using System.Text;
+using AudioMog.Application.Utilities;
 using StbVorbisSharp;
 
 namespace AudioMog.Application.Codecs
 {
-	public class OGGVorbisToWavSampleWriter : IWavSampleWriter
+	public class OggVorbisToWavSampleWriter : IWavSampleWriter
 	{
 		private Vorbis _vorbis;
 
-		public OGGVorbisToWavSampleWriter(Vorbis vorbis)
+		public OggVorbisToWavSampleWriter(Vorbis vorbis)
 		{
 			_vorbis = vorbis;
 		}

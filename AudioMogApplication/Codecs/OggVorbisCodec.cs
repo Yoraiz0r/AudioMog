@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using AudioMog.Application.AudioFileRebuilder;
+using AudioMog.Application.Utilities;
 using AudioMog.Core;
 using AudioMog.Core.Audio;
 using NVorbis;
@@ -37,7 +38,7 @@ namespace AudioMog.Application.Codecs
 				WavPath = wavPath,
 				Channels = vorbis.Channels,
 				SampleRate = vorbis.SampleRate,
-				WavSampleWriter = new OGGVorbisToWavSampleWriter(vorbis),
+				WavSampleWriter = new OggVorbisToWavSampleWriter(vorbis),
 				LoopPoints = loopPoints,
 			});
 
