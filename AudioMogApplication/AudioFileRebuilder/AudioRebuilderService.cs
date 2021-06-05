@@ -212,7 +212,7 @@ namespace AudioMog.Application.AudioFileRebuilder
 		{
 			foreach (var fileOutput in fileOutputs)
 			{
-				var fileOutputPath = Path.Combine(outputFolder, ExtensionMethods.ChangeExtension(outputFileName, fileOutput.Extension));
+				var fileOutputPath = Path.Combine(outputFolder, ExtensionMethods.AddExtension(outputFileName, fileOutput.Extension));
 				try
 				{
 					File.WriteAllBytes(fileOutputPath, fileOutput.FileBytes);
