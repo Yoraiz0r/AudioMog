@@ -13,8 +13,8 @@ namespace AudioMog.Terminal
 {
 	internal class Program
 	{
-		public const string AssemblyVersion = "2021.05.24";
-		public const string AssemblyFileVersion = "2021.05.24";
+		public const string AssemblyVersion = "2021.06.05";
+		public const string AssemblyFileVersion = "2021.06.05";
 		
 		private static ServiceProvider _serviceProvider;
 		public static ConsoleApplicationLogger Logger;
