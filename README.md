@@ -22,7 +22,7 @@ Format | Unpack | Repack | Notes
 
 # Usage
 In order to use AudioMog, you have to drag supported files onto the executable (AudioMog.exe), or nothing will happen! 
-1. Drag any file of the supported formats above to extract its contents, and create an AudioMog project settings .json file.
+1. Drag any file of the supported formats above to extract its contents, and create an AudioMog project settings `.json` file.
 2. Replace/override audio files that you wish to change. (e.g. replace `music_001.wav` with a new `music_001.wav`)
 3. (Optional) Customize the project settings .json file to your liking
 4. Drag the generated project settings .json file to repack the audio back to its original format
