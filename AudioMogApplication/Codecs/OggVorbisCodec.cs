@@ -2,7 +2,7 @@
 using AudioMog.Application.AudioFileRebuilder;
 using AudioMog.Core;
 using AudioMog.Core.Audio;
-using NAudio.Vorbis;
+using NVorbis;
 using NVorbis.Contracts;
 using StbVorbisSharp;
 
@@ -10,7 +10,7 @@ namespace AudioMog.Application.Codecs
 {
 	public class OggVorbisCodec : ACodec
 	{
-		public override string FileFormat => ".ogg";
+		public override string FileFormat => ".ogg"; 
 
 		public override void ExtractOriginal(IApplicationLogger logger, MaterialSection.MaterialEntry entry, byte[] fullFileBytes, string outputPath)
 		{
@@ -47,28 +47,22 @@ namespace AudioMog.Application.Codecs
 		public override void FixHeader(TemporaryTrack track)
 		{
 			using (var stream = new MemoryStream(track.RawPortion))
-			using (var reader = new VorbisWaveReader(stream))
+			using (var reader = new VorbisReader(stream))
 			{
 				int loopStart = 0;
 				int loopEnd = 0;
-				
-				using (var secondStream = new MemoryStream(track.RawPortion))
-				using (var sampleProvider = new VorbisSampleProvider(secondStream))
-				{
-					var Tags = sampleProvider.Tags;
-					TryGettingVariable(Tags, "LOOPSTART", ref loopStart);
-					TryGettingVariable(Tags, "LOOPEND", ref loopEnd);
-				}
 
-				var waveFormat = reader.WaveFormat;
+				var tags = reader.Tags;
+				TryGettingVariable(tags, "LOOPSTART", ref loopStart);
+				TryGettingVariable(tags, "LOOPEND", ref loopEnd);
 
-				var headerSize = reader.WaveFormat.ExtraSize;
+				var headerSize = 0;
 				var newExtraDataSize = track.OriginalEntry.NoStreamHeaderExtraDataSize + headerSize;
 				var streamSize = track.RawPortion.Length - headerSize;
 
 				var headerBytes = track.HeaderPortion;
-				WriteByte(headerBytes, 0x04, (byte) waveFormat.Channels);
-				WriteUint(headerBytes, 0x08, (uint) waveFormat.SampleRate);
+				WriteByte(headerBytes, 0x04, (byte) reader.Channels);
+				WriteUint(headerBytes, 0x08, (uint) reader.SampleRate);
 				WriteUint(headerBytes, 0x0c, (uint) loopStart);
 				WriteUint(headerBytes, 0x10, (uint) loopEnd);
 				WriteUint(headerBytes, 0x14, (uint) newExtraDataSize);
