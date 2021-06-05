@@ -32,7 +32,7 @@ In order to use AudioMog, you have to drag supported files onto the executable (
 # Terminal Settings
 AudioMog holds several settings under `TerminalSettings.json`, that you must adjust for specific games to work.
 * **Parser**
-  * `UAssetFileSizeOffsetFromEndOfFile`: UAsset files file size, and each game holds that at a different offset.
+  * `OverrideUAssetFileSizeOffsetFromEndOfFile`: (optional) Offset in UAsset to replace "expected uexp file size" bytes. (auto when `null`)
   * `MusicFileVersion`: When reading music audio binary files, you can only read files of a matching version to this.
   * `SoundFileVersion`: When reading sound audio binary files, you can only read files of a matching version to this.
 * **Audio Extractor**
