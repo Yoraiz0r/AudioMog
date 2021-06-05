@@ -4,7 +4,7 @@ AudioMog was created to assist Kingdom Hearts III modding endeavors, and works o
 
 
 # Features
-- Unpack audio binary files for supported games into playable wav/hca files
+- Unpack audio binary files for supported games into playable wav/hca/ogg files
 - Repack audio binary files with overrides to specific tracks, such that games will be able to use them properly.
 - Provide human-readable track names, for an easier modding experience
 
@@ -33,12 +33,12 @@ In order to use AudioMog, you have to drag supported files onto the executable (
 AudioMog holds several settings under `TerminalSettings.json`, that you must adjust for specific games to work.
 * **Parser**
   * `OverrideUAssetFileSizeOffsetFromEndOfFile`: (optional) Offset in UAsset to replace "expected uexp file size" bytes. (auto when `null`)
-  * `MusicFileVersion`: When reading music audio binary files, you can only read files of a matching version to this.
-  * `SoundFileVersion`: When reading sound audio binary files, you can only read files of a matching version to this.
+  * `MusicFileVersion`: When reading music audio binary files, you should only read files of a matching version to this. This serves to warn you if you try to rebuild files of unexpected versions.
+  * `SoundFileVersion`: When reading sound audio binary files, you should only read files of a matching version to this. This serves to warn you if you try to rebuild files of unexpected versions.
 * **Audio Extractor**
-  * `ExtractAsHca`: Internally, all supported games use `.hca` files, set this to `true` to extract these files as they are.
+  * `ExtractAsRaw`: Internally, all supported games use `.hca` or `.ogg` files, set this to `true` to extract these files as they are.
   * `ExtractAsWav`: Should audio files be converted to `.wav` upon extraction?
-  * You can set both `ExtractAsHca` and `ExtractAsWav` to `true`, which will give you the file in both formats.
+  * You can set both `ExtractAsRaw` and `ExtractAsWav` to `true`, which will give you the file in both formats.
 * **Terminal Settings**
   * `ImmediatelyQuitOnceAllTasksAreDone` set this to true to automatically close the AudioMog terminal once tasks are finished.
   * `LogLevel` Which messages should AudioMog's terminal show? (0: Nothing, 1: Errors only, 2: Errors & Warnings, 3: Everything)
@@ -61,6 +61,16 @@ If you're editing music files, here are the fields you can put inside each entry
 - `ExitSample`: (optional) What sample does the music file end at.
 - All of these fields are entirely optional, but **if you are replacing music files with different sample rates or lengths, you may need to mess with these.**
 
+
+# Specific Games Notes
+* **Kingdom Hearts III**
+  * Some files use `sabf2.1` instead of `sabf2.0`, while no issues occur from replacing, keep in mind that if you find failures with such files, it may be due to unknown new features of the format.
+  * Some `.hca` files use encryption, when AudioMog extracts those, it decrypts them. Therefore, the files you see are not the 'true' raw files, since you would not have been able to play or edit these.
+* **Kingdom Hearts 0.2 Birth by Sleep -A fragmentary passage-**
+  * The files use `.ogg` format, but their looping information is instead stored in the `.uexp`. Therefore, the extracted `.ogg` files you will lose looping information. The converted `.wav` files have this looping information appended into them, however!
+* **Kingdom Hearts: Melody of Memory**
+  * The files use abnormal amounts of `.` signs in the name, making it difficult to properly adjust file extensions. If you notice failures when rebuilding, it might be because of failures handling these file names!
+ 
 
 # Requirements
 - [.Net Framework 4.7.2](https://dotnet.microsoft.com/download/dotnet-framework/net472)
