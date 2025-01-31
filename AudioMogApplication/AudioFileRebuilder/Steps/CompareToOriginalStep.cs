@@ -7,22 +7,42 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 	{
 		private readonly byte[] _originalBackup;
 		private readonly int _comparisonIndex;
-		public CompareToOriginalStep(byte[] originalBackup, int comparisonIndex)
+		private readonly int _changeReportLimit;
+		public CompareToOriginalStep(byte[] originalBackup, int comparisonIndex, int changeReportLimit)
 		{
 			_originalBackup = originalBackup;
 			_comparisonIndex = comparisonIndex;
+			_changeReportLimit = changeReportLimit;
 		}
 		public override void Run(Blackboard blackboard)
 		{
 			var fileBytes = blackboard.FileBytes;
-				
+			
 			if (fileBytes.Length != _originalBackup.Length)
-				Debug.WriteLine($"wtf why is this size different?! original: {_originalBackup.Length}, new: {fileBytes.Length}");
+				Debug.WriteLine($"There's a size diff, original: {_originalBackup.Length}, new: {fileBytes.Length}");
 
-			int sizeWeCanCheck = Math.Min(_originalBackup.Length, fileBytes.Length);
-			for (int i = 0; i < sizeWeCanCheck; i++)
-				if (_originalBackup[i] != fileBytes[i])
-					Debug.WriteLine($"index: {i},  {_originalBackup[i]} : {fileBytes[i]}");
+			var sizeWeCanCheck = Math.Min(_originalBackup.Length, fileBytes.Length);
+			var changesShown = 0;
+			for (var i = 0; i < sizeWeCanCheck; i++)
+			{
+				if (_originalBackup[i] == fileBytes[i])
+					continue;
+				
+				if (changesShown == 0)
+					Debug.WriteLine($"Comparison {_comparisonIndex}!");
+					
+				Debug.WriteLine($"index: {i},  {_originalBackup[i]} : {fileBytes[i]}");
+					
+				changesShown++;
+				if (changesShown == _changeReportLimit)
+				{
+					Debug.WriteLine("Reached difference limit!");
+					break;
+				}
+			}
+
+			if (changesShown > 0)
+				Debug.WriteLine("");
 		}
 	}
 }

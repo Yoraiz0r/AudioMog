@@ -12,24 +12,22 @@ namespace AudioMog.Application.AudioFileRebuilder
 {
 	public class AudioRebuilderService : AService
 	{
+		public class ServiceOptions
+		{
+			public bool Research_CompareToOriginalFile = false;
+			public string Research_CompareToOtherFilePath = null;
+			public int Research_CompareChangeReportLimit = 100;
+		}
 		public const string RebuildSettingsFileName = "RebuildSettings.json";
 
 		public string FilePathForConfig;
 		public string RunningDirectory;
 		
-#if DEBUG
-		public bool CompareToOriginalFile = false;
-		public string CompareToOtherFilePath =
-			null;//@"P:\Projects\Modding\KH3\PAKs\Test2\BGM_title_launch_Project\manual\BGM_title_launch.uexp";
-#else
-		public bool CompareToOriginalFile = false;
-		public string CompareToOtherFilePath = null;
-#endif
-		
 		private AudioRebuilderProjectSettings _projectSettings = new AudioRebuilderProjectSettings();
 		public string TargetFileName;
 		public string ParentDirectory;
 
+		public readonly ServiceOptions Options = new ServiceOptions();
 
 		public override void Run()
 		{
@@ -247,18 +245,19 @@ namespace AudioMog.Application.AudioFileRebuilder
 				new FixTotalFileSizeStep(),
 			};
 
-			if (CompareToOriginalFile)
+			if (Options.Research_CompareToOriginalFile)
 			{
 				var originalCount = stepsAfterRebuildingFile.Count;
 				for (int i = 0; i < originalCount; i++)
-					stepsAfterRebuildingFile.Insert(i * 2 + 1, new CompareToOriginalStep(originalBackup, i + 1));
+					stepsAfterRebuildingFile.Insert(i * 2 + 1, new CompareToOriginalStep(originalBackup, i + 1, Options.Research_CompareChangeReportLimit));
 			}
 
 			var steps = new List<ARebuilderStep>();
 			steps.AddRange(stepsBeforeRebuildingFile);
 			steps.AddRange(stepsAfterRebuildingFile);
-			if (CompareToOtherFilePath != null)
-				steps.Add(new CompareToOtherStep(CompareToOtherFilePath));
+			
+			if (Options.Research_CompareToOtherFilePath != null)
+				steps.Add(new CompareToOtherStep(Options.Research_CompareToOtherFilePath));
 
 			foreach (var step in steps)
 				step.Run(blackboard);

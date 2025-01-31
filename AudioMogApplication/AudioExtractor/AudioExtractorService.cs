@@ -15,6 +15,11 @@ namespace AudioMog.Application.AudioExtractor
 {
 	public class AudioExtractorService : AService
 	{
+		public class ServiceOptions
+		{
+			public string Research_SectionsOutputDirectory = null;
+		}
+		
 		public const string ExtractionSuffix = "_Project";
 		public const string TrackNamesFileName = "TrackUsers.txt";
 		public static readonly string[] AcceptedExtensions = {".uexp", ".bytes", ".sab", ".sabf", ".mab", ".mabf"};
@@ -22,7 +27,9 @@ namespace AudioMog.Application.AudioExtractor
 		public string FilePathToExtract;
 		private Dictionary<int, string> _materialIndexToFileName = new Dictionary<int, string>();
 		private Dictionary<int, string> _materialIndexToUserNames = new Dictionary<int, string>();
-
+		
+		public readonly ServiceOptions Options = new ServiceOptions();
+		
 		public override void Run()
 		{
 			Logger.Log($"Beginning to unpack {FilePathToExtract}!");
@@ -40,6 +47,22 @@ namespace AudioMog.Application.AudioExtractor
 			var actualFileName = Path.GetFileNameWithoutExtension(FilePathToExtract);
 			var outputFolder = Path.Combine(Path.GetDirectoryName(FilePathToExtract),
 				$"{actualFileName}{ExtractionSuffix}");
+
+			var fileSplittingFolderPath = Options.Research_SectionsOutputDirectory;
+			if (fileSplittingFolderPath != null) 
+			{
+				Directory.CreateDirectory(fileSplittingFolderPath);
+				var startBytesPath = Path.Combine(fileSplittingFolderPath, "start_" + actualFileName + ".txt");
+				var innerBytesPath = Path.Combine(fileSplittingFolderPath, "inner_" + actualFileName+ ".txt");
+				var endBytesPath = Path.Combine(fileSplittingFolderPath, "end_" + actualFileName+ ".txt");
+				File.WriteAllBytes(startBytesPath, audioBinaryFile.BytesBeforeFile);
+				File.WriteAllBytes(innerBytesPath, audioBinaryFile.InnerFileBytes);
+				File.WriteAllBytes(endBytesPath, audioBinaryFile.BytesAfterFile);
+
+				stopwatch.Stop();
+				Logger.Log($"Done unpacking {FilePathToExtract}! (total time: {stopwatch.Elapsed:s\\.fff}s)");
+				return;
+			}
 
 			CollectMaterialToFileNames(audioBinaryFile, actualFileName);
 			CollectMaterialToUserNames(audioBinaryFile);
