@@ -60,7 +60,7 @@ namespace AudioMog.Terminal
 			if (args.Length == 0)
 				ShowUsageInstructions();
 
-			bool shouldWaitForInputOnceDone =
+			var shouldWaitForInputOnceDone =
 				!Settings.TerminalSettings.ImmediatelyQuitOnceAllTasksAreDone || args.Length == 0;
 			Logger.LogLevel = (ProgramLogLevel)Settings.TerminalSettings.LogLevel;
 			foreach (var arg in args)
@@ -97,7 +97,7 @@ namespace AudioMog.Terminal
 			var filePath = Path.GetFullPath(Path.Combine(ApplicationPath, ConfigFilePath));
 			if (!File.Exists(filePath))
 			{
-				string configText = JsonConvert.SerializeObject(DefaultSettings, Formatting.Indented);
+				var configText = JsonConvert.SerializeObject(DefaultSettings, Formatting.Indented);
 				var outputPath = Path.Combine(ApplicationPath, ConfigFilePath);
 				File.WriteAllText(outputPath, configText);
 				return;

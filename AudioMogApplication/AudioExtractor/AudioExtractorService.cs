@@ -22,7 +22,7 @@ namespace AudioMog.Application.AudioExtractor
 		
 		public const string ExtractionSuffix = "_Project";
 		public const string TrackNamesFileName = "TrackUsers.txt";
-		public static readonly string[] AcceptedExtensions = {".uexp", ".bytes", ".sab", ".sabf", ".mab", ".mabf"};
+		public static readonly string[] AcceptedExtensions = {".uexp", ".bytes", ".sab", ".sabf", ".mab", ".mabf", ".uasset"};
 
 		public string FilePathToExtract;
 		private Dictionary<int, string> _materialIndexToFileName = new Dictionary<int, string>();
