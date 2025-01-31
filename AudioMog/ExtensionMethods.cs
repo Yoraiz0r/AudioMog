@@ -92,5 +92,27 @@ namespace AudioMog.Core
 		{
 			return filePath + newExtension;
 		}
+		
+		public static bool FindMagicFromEnd(byte[] array, byte[] magic, out uint magicStartPosition)
+		{
+			magicStartPosition = 0;
+			for (var indexOnBig = array.Length - magic.Length; indexOnBig >= 0; indexOnBig--)
+			{
+				var match = true;
+				for (var indexInMagic = 0; indexInMagic < magic.Length; indexInMagic++)
+					if (array[indexOnBig + indexInMagic] != magic[indexInMagic])
+					{
+						match = false;
+						break;
+					}
+
+				if (match)
+				{
+					magicStartPosition = (uint)indexOnBig;
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 }

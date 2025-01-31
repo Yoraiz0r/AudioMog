@@ -19,5 +19,18 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 		{
 			bytes[offset] = value;
 		}
+
+		protected bool WriteUintIfMatch(byte[] bytes, int offset, uint matchValue, uint writeValue)
+		{
+			var matches = ReadUint(bytes, offset) == matchValue;
+			if (matches)
+				WriteUint(bytes, offset, writeValue);
+			return matches;
+		}
+		
+		protected uint ReadUint(byte[] bytes, int offset)
+		{
+			return BitConverter.ToUInt32(bytes, offset);
+		}
 	}
 }

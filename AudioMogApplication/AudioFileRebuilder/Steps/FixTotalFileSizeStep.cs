@@ -1,4 +1,7 @@
-﻿using AudioMog.Core.Audio;
+﻿using System;
+using System.Linq;
+using AudioMog.Core;
+using AudioMog.Core.Audio;
 
 namespace AudioMog.Application.AudioFileRebuilder.Steps
 {
@@ -12,18 +15,31 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 		{
 			var positionBeforeMagic = file.InnerFileStartOffset;
 			
-			var expectedSize = fileBytes.Length - positionBeforeMagic - file.BytesAfterFile.Length;
+			var originalInnerSize = (uint)file.InnerFileBytes.Length;
+			var changedInnerSize = fileBytes.Length - positionBeforeMagic - file.BytesAfterFile.Length;
 			
-			WriteUint(fileBytes, (int)positionBeforeMagic + 0x0c, (uint)expectedSize);
+			var wroteIntoAudioBundle = WriteUintIfMatch(fileBytes, (int)positionBeforeMagic + 0x0c, originalInnerSize, (uint)changedInnerSize);
 			
-			if (positionBeforeMagic >= 16)
+			//2025
+			var tightWrite1 = WriteUintIfMatch(fileBytes, (int)positionBeforeMagic - 4, originalInnerSize, (uint)changedInnerSize);
+			var tightWrite2 = WriteUintIfMatch(fileBytes, (int)positionBeforeMagic - 8, originalInnerSize, (uint)changedInnerSize);
+			if (tightWrite1 && tightWrite2)
 			{
-				WriteUint(fileBytes, (int)positionBeforeMagic - 16, (uint)expectedSize);
-				WriteUint(fileBytes, (int)positionBeforeMagic - 12, (uint)expectedSize);
+				var originalWeirdSize = BitConverter.GetBytes(originalInnerSize + 16).Concat(new byte[] { 0x00, 0x00, 0x01, 0x00, 0x10, 0x00 }).ToArray();
+				var hasMagic = ExtensionMethods.FindMagicFromEnd(fileBytes, originalWeirdSize, out var offset);
+				if (hasMagic)
+					WriteUintIfMatch(fileBytes, (int)offset, originalInnerSize + 16, (uint)changedInnerSize + 16);
+				return;
 			}
 			
+			//2019
+			if (positionBeforeMagic >= 16)
+			{
+				WriteUintIfMatch(fileBytes, (int)positionBeforeMagic - 16, originalInnerSize, (uint)changedInnerSize);
+				WriteUintIfMatch(fileBytes, (int)positionBeforeMagic - 12, originalInnerSize, (uint)changedInnerSize);
+			}
 			if (positionBeforeMagic >= 44)
-				WriteUint(fileBytes, (int)positionBeforeMagic - 44, (uint)expectedSize);
+				WriteUintIfMatch(fileBytes, (int)positionBeforeMagic - 44, originalInnerSize, (uint)changedInnerSize);
 		}
 	}
 }
