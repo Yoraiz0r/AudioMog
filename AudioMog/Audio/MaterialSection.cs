@@ -114,6 +114,11 @@ namespace AudioMog.Core.Audio
 			{
 				switch (Codec)
 				{
+					case MaterialCodecType.PCM:
+						InnerStreamStartPosition = StreamPosition;
+						ExtraDataObject = new PcmExtraData(this, binaryReader);
+						break;
+					
 					case MaterialCodecType.OGGVorbis:
 						InnerStreamStartPosition = StreamPosition;
 						ExtraDataObject = new OggVorbisExtraData(this, binaryReader);
@@ -121,6 +126,11 @@ namespace AudioMog.Core.Audio
 					
 					case MaterialCodecType.HCA:
 						ExtraDataObject = new HcaExtraData(this, binaryReader);
+						break;
+					
+					case MaterialCodecType.ATRAC9:
+						InnerStreamStartPosition = StreamPosition;
+						ExtraDataObject = new Atrac9ExtraData(this, binaryReader);
 						break;
 				}
 			}

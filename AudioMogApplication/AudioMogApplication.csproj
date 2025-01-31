@@ -48,11 +48,13 @@
         <Compile Include="AudioFileRebuilder\AudioRebuilderFileOutput.cs" />
         <Compile Include="AudioFileRebuilder\Steps\CompareToOtherStep.cs" />
         <Compile Include="AudioFileRebuilder\Steps\PrintTrackHeadersStep.cs" />
+        <Compile Include="Codecs\Atrac9Codec.cs" />
         <Compile Include="Codecs\AvailableCodecs.cs" />
         <Compile Include="Codecs\HcaCodec.cs" />
         <Compile Include="Codecs\ACodec.cs" />
         <Compile Include="Codecs\OggVorbisCodec.cs" />
         <Compile Include="Codecs\OggVorbisToWavSampleWriter.cs" />
+        <Compile Include="Codecs\PCMCodec.cs" />
         <Compile Include="FileParser.cs" />
         <Compile Include="IApplicationLogger.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

@@ -9,8 +9,10 @@ namespace AudioMog.Application.Codecs
 			switch (codec)
 			{
 				default: return null;
+				case MaterialCodecType.PCM: return new PCMCodec();
 				case MaterialCodecType.OGGVorbis: return new OggVorbisCodec();
 				case MaterialCodecType.HCA: return new HcaACodec();
+				case MaterialCodecType.ATRAC9: return new Atrac9Codec();
 			}
 		}
 	}
