@@ -6,7 +6,7 @@ namespace AudioMog.Application.AudioFileRebuilder.Steps
 	public class CompareToOriginalStep : ARebuilderStep
 	{
 		private readonly byte[] _originalBackup;
-		private int _comparisonIndex;
+		private readonly int _comparisonIndex;
 		public CompareToOriginalStep(byte[] originalBackup, int comparisonIndex)
 		{
 			_originalBackup = originalBackup;

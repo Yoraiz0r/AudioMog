@@ -248,8 +248,11 @@ namespace AudioMog.Application.AudioFileRebuilder
 			};
 
 			if (CompareToOriginalFile)
-				for (int i = stepsAfterRebuildingFile.Count - 1; i >= 0; i--)
-					stepsAfterRebuildingFile.Insert(i + 1, new CompareToOriginalStep(originalBackup, (i - 1) / 2));
+			{
+				var originalCount = stepsAfterRebuildingFile.Count;
+				for (int i = 0; i < originalCount; i++)
+					stepsAfterRebuildingFile.Insert(i * 2 + 1, new CompareToOriginalStep(originalBackup, i + 1));
+			}
 
 			var steps = new List<ARebuilderStep>();
 			steps.AddRange(stepsBeforeRebuildingFile);
